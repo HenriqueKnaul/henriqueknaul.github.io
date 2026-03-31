@@ -1,17 +1,40 @@
 ---
+import { getCollection } from 'astro:content';
 
+// Busca todos os projetos da coleção renomeada
+const allProjects = await getCollection('projects');
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>Plataforma Udesc Maker</title>
+    <style>
+      body { font-family: sans-serif; padding: 2rem; max-width: 800px; margin: 0 auto; background: #f9f9f9; }
+      .header { text-align: center; margin-bottom: 3rem; }
+      .card { background: white; border: 1px solid #ddd; padding: 1.5rem; margin-bottom: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+      .card h2 { margin-top: 0; }
+      .card a { text-decoration: none; color: #0056b3; }
+      .tags { color: #666; font-size: 0.9em; margin-top: 1rem; }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Plataforma Udesc Maker</h1>
+      <p>Fomentando a cultura maker na universidade e comunidade.</p>
+    </div>
+
+    <h2>Projetos da Comunidade</h2>
+
+    {allProjects.map(project => (
+      <div class="card">
+        <h2><a href={`/projects/${project.id}`}>{project.data.titulo}</a></h2>
+        <p>{project.data.resumo}</p>
+        <div class="tags">
+          Dificuldade: <strong>{project.data.dificuldade}</strong> | 
+          Tempo: <strong>{project.data.duracao}</strong>
+        </div>
+      </div>
+    ))}
+  </body>
 </html>

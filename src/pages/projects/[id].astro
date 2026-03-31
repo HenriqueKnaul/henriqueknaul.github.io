@@ -1,0 +1,44 @@
+---
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allProjects = await getCollection('projects');
+  return allProjects.map(project => ({
+    params: { id: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>{project.data.titulo} - Udesc Maker</title>
+    <style>
+      body { font-family: sans-serif; padding: 2rem; max-width: 800px; margin: 0 auto; line-height: 1.6; }
+      .voltar { display: inline-block; margin-bottom: 2rem; text-decoration: none; color: #0056b3; font-weight: bold; }
+      .capa { max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 1.5rem; }
+      .metadados { background: #eef2f5; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; }
+      .metadados p { margin: 0.5rem 0; }
+    </style>
+  </head>
+  <body>
+    <a href="/" class="voltar">← Voltar para a lista</a>
+    
+    <h1>{project.data.titulo}</h1>
+    
+    <div class="metadados">
+      <p><strong>Autor:</strong> {project.data.autor}</p>
+      <p><strong>Idade recomendada:</strong> {project.data.idade_minima} anos</p>
+      <p><strong>Categorias:</strong> {project.data.categoria.join(', ')}</p>
+    </div>
+
+    <hr />
+
+    <Content />
+    
+  </body>
+</html>
