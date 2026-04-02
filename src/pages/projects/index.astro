@@ -1,0 +1,596 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CardProjeto from "../../components/CardProjeto.astro";
+import { getCollection } from "astro:content";
+
+const todos_projetos = await getCollection("projects");
+
+const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categoria))].sort();
+---
+
+<BaseLayout titulo_pagina="Projetos" pagina_ativa="projetos">
+
+  <!-- HERO DA PÁGINA -->
+  <section class="hero_busca">
+    <div class="container">
+      <h1>Projetos Maker</h1>
+      <p>Explore nossa coleção de projetos maker. Use os filtros e a busca para encontrar o projeto perfeito para você!</p>
+    </div>
+  </section>
+
+  <!-- BARRA DE BUSCA + BOTÃO FILTROS -->
+  <section class="barra_secao">
+    <div class="container">
+      <div class="barra_linha">
+        <div class="busca_wrap">
+          <svg class="busca_icone" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input
+            id="busca_input"
+            type="search"
+            placeholder="Buscar por título, conteúdo, tags..."
+            class="busca_input"
+            autocomplete="off"
+          />
+        </div>
+        <button id="abrir_filtros" class="filtros_botao" aria-expanded="false">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/>
+          </svg>
+          Filtros
+          <span id="filtros_contagem" class="filtros_contagem" style="display:none">0</span>
+        </button>
+      </div>
+
+      <!-- Tags de filtros ativos -->
+      <div id="filtros_ativos" class="filtros_ativos" style="display:none"></div>
+    </div>
+  </section>
+
+  <!-- RESULTADOS -->
+  <section class="resultados_secao">
+    <div class="container">
+      <p id="busca_contagem" class="busca_contagem"></p>
+
+      <div id="projetos_grid" class="projetos_grid">
+        {todos_projetos.map((projeto) => (
+          <div
+            class="projeto_item"
+            data-titulo={projeto.data.titulo.toLowerCase()}
+            data-resumo={projeto.data.resumo.toLowerCase()}
+            data-tags={(projeto.data.tags ?? []).join(' ').toLowerCase()}
+            data-categorias={projeto.data.categoria.join(',')}
+            data-dificuldade={projeto.data.dificuldade}
+            data-idade={projeto.data.idade_minima}
+          >
+            <CardProjeto
+              slug={projeto.id}
+              titulo={projeto.data.titulo}
+              resumo={projeto.data.resumo}
+              imagem={projeto.data.thumbnail ?? "/images/placeholder.jpg"}
+              categorias={projeto.data.categoria}
+              idade_minima={projeto.data.idade_minima}
+              duracao={projeto.data.duracao}
+              dificuldade={projeto.data.dificuldade}
+              autor={projeto.data.autor}
+            />
+          </div>
+        ))}
+      </div>
+
+      <!-- Estado vazio -->
+      <div id="estado_vazio" class="estado_vazio" style="display:none">
+        <div class="vazio_icone">🔍</div>
+        <p class="vazio_titulo">Nenhum projeto encontrado</p>
+        <p class="vazio_desc">Tente outros termos ou remova alguns filtros.</p>
+        <button id="limpar_tudo" class="botao_limpar_tudo">Limpar tudo</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- OVERLAY -->
+  <div id="filtros_overlay" class="filtros_overlay"></div>
+
+  <!-- DRAWER DE FILTROS -->
+  <aside id="filtros_drawer" class="filtros_drawer" role="dialog" aria-modal="true" aria-label="Filtros">
+    <div class="drawer_cabecalho">
+      <div>
+        <h2 class="drawer_titulo">Filtros</h2>
+        <p class="drawer_subtitulo">Refine sua busca por categorias e nível de dificuldade</p>
+      </div>
+      <button id="fechar_filtros" class="drawer_fechar" aria-label="Fechar filtros">✕</button>
+    </div>
+
+    <div class="drawer_corpo">
+
+      <!-- Categorias (geradas dinamicamente dos .md) -->
+      <fieldset class="filtro_grupo">
+        <legend class="filtro_legenda">Categorias</legend>
+        <div class="checkbox_grid">
+          {todas_categorias.map(cat => (
+            <label class="checkbox_label">
+              <input type="checkbox" class="filtro_check" data-filtro="categoria" value={cat} />
+              <span class="checkmark"></span>
+              {cat}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <hr class="divisor" />
+
+      <!-- Faixa Etária -->
+      <fieldset class="filtro_grupo">
+        <legend class="filtro_legenda">Faixa Etária</legend>
+        <div class="checkbox_stack">
+          {[
+            { label: '6-9 anos',   value: '6-9'   },
+            { label: '10-12 anos', value: '10-12' },
+            { label: '13-15 anos', value: '13-15' },
+            { label: '16+ anos',   value: '16-99' },
+          ].map(faixa => (
+            <label class="checkbox_label">
+              <input type="checkbox" class="filtro_check" data-filtro="idade" value={faixa.value} />
+              <span class="checkmark"></span>
+              {faixa.label}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <hr class="divisor" />
+
+      <!-- Dificuldade -->
+      <fieldset class="filtro_grupo">
+        <legend class="filtro_legenda">Dificuldade</legend>
+        <div class="checkbox_stack">
+          {[
+            { label: 'Iniciante',     value: 'iniciante',     classe: 'nivel_iniciante'     },
+            { label: 'Intermediário', value: 'intermediario', classe: 'nivel_intermediario' },
+            { label: 'Avançado',      value: 'avancado',      classe: 'nivel_avancado'      },
+          ].map(nivel => (
+            <label class="checkbox_label">
+              <input type="checkbox" class="filtro_check" data-filtro="dificuldade" value={nivel.value} />
+              <span class="checkmark"></span>
+              <span class={`nivel_badge ${nivel.classe}`}>{nivel.label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+    </div>
+
+    <div class="drawer_rodape">
+      <button id="limpar_filtros" class="botao_limpar">✕ Limpar Filtros</button>
+    </div>
+  </aside>
+
+</BaseLayout>
+
+<script>
+  const estado = {
+    query: '',
+    categorias: new Set<string>(),
+    idades: new Set<string>(),
+    dificuldades: new Set<string>(),
+  };
+
+  const busca_input    = document.getElementById('busca_input')    as HTMLInputElement;
+  const abrir_btn      = document.getElementById('abrir_filtros')  as HTMLButtonElement;
+  const fechar_btn     = document.getElementById('fechar_filtros') as HTMLButtonElement;
+  const limpar_btn     = document.getElementById('limpar_filtros') as HTMLButtonElement;
+  const limpar_tudo    = document.getElementById('limpar_tudo')    as HTMLButtonElement;
+  const overlay        = document.getElementById('filtros_overlay') as HTMLDivElement;
+  const drawer         = document.getElementById('filtros_drawer') as HTMLElement;
+  const contagem_badge = document.getElementById('filtros_contagem') as HTMLSpanElement;
+  const filtros_ativos = document.getElementById('filtros_ativos') as HTMLDivElement;
+  const busca_contagem = document.getElementById('busca_contagem') as HTMLParagraphElement;
+  const estado_vazio   = document.getElementById('estado_vazio')   as HTMLDivElement;
+  const itens          = document.querySelectorAll<HTMLDivElement>('.projeto_item');
+  const checks         = document.querySelectorAll<HTMLInputElement>('.filtro_check');
+
+  // — Drawer —
+  function abrirDrawer() {
+    drawer.classList.add('aberto');
+    overlay.classList.add('aberto');
+    abrir_btn.setAttribute('aria-expanded', 'true');
+    abrir_btn.classList.add('ativo');
+    document.body.style.overflow = 'hidden';
+  }
+  function fecharDrawer() {
+    drawer.classList.remove('aberto');
+    overlay.classList.remove('aberto');
+    abrir_btn.setAttribute('aria-expanded', 'false');
+    abrir_btn.classList.remove('ativo');
+    document.body.style.overflow = '';
+  }
+
+  abrir_btn.addEventListener('click', abrirDrawer);
+  fechar_btn.addEventListener('click', fecharDrawer);
+  overlay.addEventListener('click', fecharDrawer);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharDrawer(); });
+
+  // — Filtros —
+  function aplicarFiltros() {
+    let visiveis = 0;
+
+    itens.forEach(item => {
+      const titulo      = item.dataset.titulo ?? '';
+      const resumo      = item.dataset.resumo ?? '';
+      const tags        = item.dataset.tags ?? '';
+      const categorias  = item.dataset.categorias?.split(',') ?? [];
+      const dificuldade = item.dataset.dificuldade ?? '';
+      const idade       = parseInt(item.dataset.idade ?? '0');
+
+      const q = estado.query;
+      const ok_query = !q || titulo.includes(q) || resumo.includes(q) || tags.includes(q);
+
+      const ok_cat = estado.categorias.size === 0 ||
+        [...estado.categorias].some(c => categorias.includes(c));
+
+      const ok_idade = estado.idades.size === 0 ||
+        [...estado.idades].some(faixa => {
+          const [min, max] = faixa.split('-').map(Number);
+          return idade >= min && idade <= max;
+        });
+
+      const ok_dif = estado.dificuldades.size === 0 || estado.dificuldades.has(dificuldade);
+
+      const mostrar = ok_query && ok_cat && ok_idade && ok_dif;
+      item.classList.toggle('oculto', !mostrar);
+      if (mostrar) visiveis++;
+    });
+
+    const total = itens.length;
+    busca_contagem.textContent =
+      `${visiveis} projeto${visiveis !== 1 ? 's' : ''} encontrado${visiveis !== 1 ? 's' : ''}`;
+    estado_vazio.style.display = visiveis === 0 ? 'block' : 'none';
+
+    const total_filtros = estado.categorias.size + estado.idades.size + estado.dificuldades.size;
+    contagem_badge.textContent = String(total_filtros);
+    contagem_badge.style.display = total_filtros > 0 ? 'inline-block' : 'none';
+
+    renderizarTags();
+  }
+
+  const labels_idade: Record<string, string> = {
+    '6-9': '6-9 anos', '10-12': '10-12 anos',
+    '13-15': '13-15 anos', '16-99': '16+ anos',
+  };
+  const labels_dif: Record<string, string> = {
+    'iniciante': 'Iniciante', 'intermediario': 'Intermediário', 'avancado': 'Avançado',
+  };
+
+  function renderizarTags() {
+    filtros_ativos.innerHTML = '';
+    const todos = [
+      ...[...estado.categorias].map(v  => ({ label: v, set: estado.categorias, value: v })),
+      ...[...estado.idades].map(v      => ({ label: labels_idade[v] ?? v, set: estado.idades, value: v })),
+      ...[...estado.dificuldades].map(v => ({ label: labels_dif[v] ?? v, set: estado.dificuldades, value: v })),
+    ];
+    todos.forEach(({ label, set, value }) => {
+      const tag = document.createElement('button');
+      tag.className = 'tag_ativa';
+      tag.textContent = `${label} ✕`;
+      tag.addEventListener('click', () => {
+        set.delete(value);
+        checks.forEach(c => { if (c.value === value) c.checked = false; });
+        aplicarFiltros();
+      });
+      filtros_ativos.appendChild(tag);
+    });
+    filtros_ativos.style.display = todos.length > 0 ? 'flex' : 'none';
+  }
+
+  checks.forEach(check => {
+    check.addEventListener('change', () => {
+      const set = check.dataset.filtro === 'categoria'   ? estado.categorias
+                : check.dataset.filtro === 'idade'       ? estado.idades
+                : estado.dificuldades;
+      check.checked ? set.add(check.value) : set.delete(check.value);
+      aplicarFiltros();
+    });
+  });
+
+  let timer: ReturnType<typeof setTimeout>;
+  busca_input.addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      estado.query = busca_input.value.trim().toLowerCase();
+      aplicarFiltros();
+    }, 200);
+  });
+
+  function limparFiltros() {
+    estado.categorias.clear();
+    estado.idades.clear();
+    estado.dificuldades.clear();
+    checks.forEach(c => { c.checked = false; });
+    aplicarFiltros();
+  }
+  function limparTudo() {
+    limparFiltros();
+    estado.query = '';
+    busca_input.value = '';
+    aplicarFiltros();
+  }
+
+  limpar_btn.addEventListener('click', limparFiltros);
+  limpar_tudo.addEventListener('click', limparTudo);
+
+  aplicarFiltros();
+</script>
+
+<style>
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  /* HERO */
+  .hero_busca {
+    background: #f0fdf4;
+    padding: 48px 0 36px;
+  }
+  .hero_busca h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 8px;
+  }
+  .hero_busca p {
+    font-size: 14px;
+    color: #166534;
+    max-width: 480px;
+    line-height: 1.6;
+  }
+
+  /* BARRA */
+  .barra_secao {
+    padding: 24px 0 0;
+    background: #fff;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .barra_linha {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding-bottom: 16px;
+  }
+  .busca_wrap {
+    flex: 1;
+    position: relative;
+  }
+  .busca_icone {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    pointer-events: none;
+  }
+  .busca_input {
+    width: 100%;
+    padding: 11px 16px 11px 42px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #374151;
+    outline: none;
+    font-family: inherit;
+    background: #fff;
+    transition: border-color 0.15s;
+  }
+  .busca_input:focus { border-color: #166534; }
+  .busca_input::placeholder { color: #9ca3af; }
+
+  .filtros_botao {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 18px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: inherit;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .filtros_botao:hover,
+  .filtros_botao.ativo { border-color: #166534; background: #f0fdf4; color: #14532d; }
+
+  .filtros_contagem {
+    background: #166534;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 1px 7px;
+    line-height: 1.5;
+  }
+
+  .filtros_ativos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-bottom: 12px;
+  }
+  .tag_ativa {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #dcfce7;
+    color: #166534;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+  .tag_ativa:hover { background: #bbf7d0; }
+
+  /* RESULTADOS */
+  .resultados_secao { padding: 28px 0 64px; background: #fff; }
+  .busca_contagem { font-size: 13px; color: #6b7280; margin-bottom: 20px; }
+
+  .projetos_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .projeto_item.oculto { display: none; }
+
+  /* ESTADO VAZIO */
+  .estado_vazio { text-align: center; padding: 64px 16px; }
+  .vazio_icone { font-size: 40px; margin-bottom: 12px; }
+  .vazio_titulo { font-size: 17px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+  .vazio_desc { font-size: 14px; color: #9ca3af; margin-bottom: 20px; }
+  .botao_limpar_tudo {
+    background: #166534;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .botao_limpar_tudo:hover { background: #14532d; }
+
+  /* DRAWER */
+  .filtros_overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 200;
+  }
+  .filtros_overlay.aberto { display: block; }
+
+  .filtros_drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 320px;
+    max-width: 95vw;
+    background: #fff;
+    z-index: 201;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
+  }
+  .filtros_drawer.aberto { transform: translateX(0); }
+
+  .drawer_cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .drawer_titulo { font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 4px; }
+  .drawer_subtitulo { font-size: 13px; color: #166534; line-height: 1.4; max-width: 200px; }
+  .drawer_fechar {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+  }
+  .drawer_fechar:hover { color: #374151; }
+
+  .drawer_corpo {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filtro_grupo { border: none; padding: 0; margin: 0 0 8px; }
+  .filtro_legenda { font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 12px; display: block; }
+
+  .checkbox_grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .checkbox_stack { display: flex; flex-direction: column; gap: 10px; }
+
+  .checkbox_label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #374151;
+    cursor: pointer;
+    user-select: none;
+  }
+  .checkbox_label input[type="checkbox"] { display: none; }
+  .checkmark {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 4px;
+    flex-shrink: 0;
+    background: #fff;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+  }
+  .checkbox_label input:checked + .checkmark {
+    background: #166534;
+    border-color: #166534;
+  }
+  .checkbox_label input:checked + .checkmark::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 5px;
+    height: 9px;
+    border: 2px solid #fff;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+  }
+
+  .nivel_badge { font-weight: 600; padding: 2px 10px; border-radius: 4px; font-size: 13px; }
+  .nivel_iniciante     { color: #166534; background: #dcfce7; }
+  .nivel_intermediario { color: #92400e; background: #fef3c7; }
+  .nivel_avancado      { color: #991b1b; background: #fee2e2; }
+
+  .divisor { border: none; border-top: 1px solid #f3f4f6; margin: 12px 0; }
+
+  .drawer_rodape { padding: 16px 20px; border-top: 1px solid #e5e7eb; }
+  .botao_limpar {
+    width: 100%;
+    padding: 10px;
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #374151;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .botao_limpar:hover { border-color: #9ca3af; background: #f9fafb; }
+
+  /* RESPONSIVO */
+  @media (max-width: 640px) {
+    .container { padding: 0 24px; }
+    .barra_linha { flex-direction: column; align-items: stretch; }
+    .filtros_botao { justify-content: center; }
+  }
+</style>
