@@ -1,18 +1,15 @@
 ---
-// qual página está ativa agora? (para destacar o botão certo na navbar)
 const { pagina_ativa = "inicio" } = Astro.props;
 ---
 
 <nav class="navbar">
-  <!-- logo do projeto -->
   <a href="/" class="logo">
     <img src="/logo.png" alt="UDESC Maker" />
   </a>
 
-  <!-- links de navegação -->
   <div class="links">
     <a href="/" class={pagina_ativa === "inicio" ? "ativo" : ""}>Início</a>
-    <a href="/projects" class={pagina_ativa === "projetos" ? "ativo" : ""}>Projetos</a>
+    <a href="/projetos" class={pagina_ativa === "projetos" ? "ativo" : ""}>Projetos</a>
   </div>
 </nav>
 
@@ -48,11 +45,21 @@ const { pagina_ativa = "inicio" } = Astro.props;
     border-radius: 8px;
     font-size: 15px;
     font-weight: 500;
+    transition: background 0.15s, color 0.15s;
   }
 
-  /* botão da página ativa fica verde */
+  .links a:hover {
+    background: #f0fdf4;
+    color: #166534;
+  }
+
+  /* página ativa fica verde */
   .links a.ativo {
     background: #166534;
     color: white;
+  }
+
+  .links a.ativo:hover {
+    background: #14532d;
   }
 </style>

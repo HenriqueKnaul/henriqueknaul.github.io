@@ -1,16 +1,17 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import CardProjeto from "../../components/CardProjeto.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CardProjeto from "../components/CardProjeto.astro";
 import { getCollection } from "astro:content";
 
 const todos_projetos = await getCollection("projects");
 
+// categorias únicas extraídas dos .md
 const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categoria))].sort();
 ---
 
 <BaseLayout titulo_pagina="Projetos" pagina_ativa="projetos">
 
-  <!-- HERO DA PÁGINA -->
+  <!-- hero -->
   <section class="hero_busca">
     <div class="container">
       <h1>Projetos Maker</h1>
@@ -18,7 +19,7 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     </div>
   </section>
 
-  <!-- BARRA DE BUSCA + BOTÃO FILTROS -->
+  <!-- barra de busca -->
   <section class="barra_secao">
     <div class="container">
       <div class="barra_linha">
@@ -43,16 +44,17 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
         </button>
       </div>
 
-      <!-- Tags de filtros ativos -->
+      <!-- tags de filtros ativos -->
       <div id="filtros_ativos" class="filtros_ativos" style="display:none"></div>
     </div>
   </section>
 
-  <!-- RESULTADOS -->
+  <!-- resultados -->
   <section class="resultados_secao">
     <div class="container">
       <p id="busca_contagem" class="busca_contagem"></p>
 
+      <!-- grid: auto-fill com min 280px — todos os itens mesma altura via subgrid/align-stretch -->
       <div id="projetos_grid" class="projetos_grid">
         {todos_projetos.map((projeto) => (
           <div
@@ -79,7 +81,7 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
         ))}
       </div>
 
-      <!-- Estado vazio -->
+      <!-- estado vazio -->
       <div id="estado_vazio" class="estado_vazio" style="display:none">
         <div class="vazio_icone">🔍</div>
         <p class="vazio_titulo">Nenhum projeto encontrado</p>
@@ -89,10 +91,10 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     </div>
   </section>
 
-  <!-- OVERLAY -->
+  <!-- overlay -->
   <div id="filtros_overlay" class="filtros_overlay"></div>
 
-  <!-- DRAWER DE FILTROS -->
+  <!-- drawer de filtros -->
   <aside id="filtros_drawer" class="filtros_drawer" role="dialog" aria-modal="true" aria-label="Filtros">
     <div class="drawer_cabecalho">
       <div>
@@ -104,7 +106,7 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
 
     <div class="drawer_corpo">
 
-      <!-- Categorias (geradas dinamicamente dos .md) -->
+      <!-- categorias geradas dos .md -->
       <fieldset class="filtro_grupo">
         <legend class="filtro_legenda">Categorias</legend>
         <div class="checkbox_grid">
@@ -120,7 +122,7 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
 
       <hr class="divisor" />
 
-      <!-- Faixa Etária -->
+      <!-- faixa etária -->
       <fieldset class="filtro_grupo">
         <legend class="filtro_legenda">Faixa Etária</legend>
         <div class="checkbox_stack">
@@ -129,11 +131,11 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
             { label: '10-12 anos', value: '10-12' },
             { label: '13-15 anos', value: '13-15' },
             { label: '16+ anos',   value: '16-99' },
-          ].map(faixa => (
+          ].map(f => (
             <label class="checkbox_label">
-              <input type="checkbox" class="filtro_check" data-filtro="idade" value={faixa.value} />
+              <input type="checkbox" class="filtro_check" data-filtro="idade" value={f.value} />
               <span class="checkmark"></span>
-              {faixa.label}
+              {f.label}
             </label>
           ))}
         </div>
@@ -141,19 +143,19 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
 
       <hr class="divisor" />
 
-      <!-- Dificuldade -->
+      <!-- dificuldade — valores batem com o z.enum do config.ts -->
       <fieldset class="filtro_grupo">
         <legend class="filtro_legenda">Dificuldade</legend>
         <div class="checkbox_stack">
           {[
-            { label: 'Iniciante',     value: 'iniciante',     classe: 'nivel_iniciante'     },
-            { label: 'Intermediário', value: 'intermediario', classe: 'nivel_intermediario' },
-            { label: 'Avançado',      value: 'avancado',      classe: 'nivel_avancado'      },
-          ].map(nivel => (
+            { label: 'Iniciante',     value: 'iniciante',     cls: 'nivel_iniciante'     },
+            { label: 'Intermediário', value: 'intermediario', cls: 'nivel_intermediario' },
+            { label: 'Avançado',      value: 'avancado',      cls: 'nivel_avancado'      },
+          ].map(n => (
             <label class="checkbox_label">
-              <input type="checkbox" class="filtro_check" data-filtro="dificuldade" value={nivel.value} />
+              <input type="checkbox" class="filtro_check" data-filtro="dificuldade" value={n.value} />
               <span class="checkmark"></span>
-              <span class={`nivel_badge ${nivel.classe}`}>{nivel.label}</span>
+              <span class={`nivel_badge ${n.cls}`}>{n.label}</span>
             </label>
           ))}
         </div>
@@ -176,21 +178,21 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     dificuldades: new Set<string>(),
   };
 
-  const busca_input    = document.getElementById('busca_input')    as HTMLInputElement;
-  const abrir_btn      = document.getElementById('abrir_filtros')  as HTMLButtonElement;
-  const fechar_btn     = document.getElementById('fechar_filtros') as HTMLButtonElement;
-  const limpar_btn     = document.getElementById('limpar_filtros') as HTMLButtonElement;
-  const limpar_tudo    = document.getElementById('limpar_tudo')    as HTMLButtonElement;
+  const busca_input    = document.getElementById('busca_input')     as HTMLInputElement;
+  const abrir_btn      = document.getElementById('abrir_filtros')   as HTMLButtonElement;
+  const fechar_btn     = document.getElementById('fechar_filtros')  as HTMLButtonElement;
+  const limpar_btn     = document.getElementById('limpar_filtros')  as HTMLButtonElement;
+  const limpar_tudo    = document.getElementById('limpar_tudo')     as HTMLButtonElement;
   const overlay        = document.getElementById('filtros_overlay') as HTMLDivElement;
-  const drawer         = document.getElementById('filtros_drawer') as HTMLElement;
+  const drawer         = document.getElementById('filtros_drawer')  as HTMLElement;
   const contagem_badge = document.getElementById('filtros_contagem') as HTMLSpanElement;
-  const filtros_ativos = document.getElementById('filtros_ativos') as HTMLDivElement;
-  const busca_contagem = document.getElementById('busca_contagem') as HTMLParagraphElement;
-  const estado_vazio   = document.getElementById('estado_vazio')   as HTMLDivElement;
+  const filtros_ativos = document.getElementById('filtros_ativos')  as HTMLDivElement;
+  const busca_contagem = document.getElementById('busca_contagem')  as HTMLParagraphElement;
+  const estado_vazio   = document.getElementById('estado_vazio')    as HTMLDivElement;
   const itens          = document.querySelectorAll<HTMLDivElement>('.projeto_item');
   const checks         = document.querySelectorAll<HTMLInputElement>('.filtro_check');
 
-  // — Drawer —
+  // drawer
   function abrirDrawer() {
     drawer.classList.add('aberto');
     overlay.classList.add('aberto');
@@ -211,7 +213,7 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
   overlay.addEventListener('click', fecharDrawer);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharDrawer(); });
 
-  // — Filtros —
+  // filtros
   function aplicarFiltros() {
     let visiveis = 0;
 
@@ -242,7 +244,6 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
       if (mostrar) visiveis++;
     });
 
-    const total = itens.length;
     busca_contagem.textContent =
       `${visiveis} projeto${visiveis !== 1 ? 's' : ''} encontrado${visiveis !== 1 ? 's' : ''}`;
     estado_vazio.style.display = visiveis === 0 ? 'block' : 'none';
@@ -259,15 +260,15 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     '13-15': '13-15 anos', '16-99': '16+ anos',
   };
   const labels_dif: Record<string, string> = {
-    'iniciante': 'Iniciante', 'intermediario': 'Intermediário', 'avancado': 'Avançado',
+    iniciante: 'Iniciante', intermediario: 'Intermediário', avancado: 'Avançado',
   };
 
   function renderizarTags() {
     filtros_ativos.innerHTML = '';
     const todos = [
-      ...[...estado.categorias].map(v  => ({ label: v, set: estado.categorias, value: v })),
-      ...[...estado.idades].map(v      => ({ label: labels_idade[v] ?? v, set: estado.idades, value: v })),
-      ...[...estado.dificuldades].map(v => ({ label: labels_dif[v] ?? v, set: estado.dificuldades, value: v })),
+      ...[...estado.categorias].map(v  => ({ label: v,                  set: estado.categorias,  value: v })),
+      ...[...estado.idades].map(v      => ({ label: labels_idade[v] ?? v, set: estado.idades,      value: v })),
+      ...[...estado.dificuldades].map(v => ({ label: labels_dif[v] ?? v,  set: estado.dificuldades, value: v })),
     ];
     todos.forEach(({ label, set, value }) => {
       const tag = document.createElement('button');
@@ -285,8 +286,8 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
 
   checks.forEach(check => {
     check.addEventListener('change', () => {
-      const set = check.dataset.filtro === 'categoria'   ? estado.categorias
-                : check.dataset.filtro === 'idade'       ? estado.idades
+      const set = check.dataset.filtro === 'categoria'  ? estado.categorias
+                : check.dataset.filtro === 'idade'      ? estado.idades
                 : estado.dificuldades;
       check.checked ? set.add(check.value) : set.delete(check.value);
       aplicarFiltros();
@@ -329,7 +330,7 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     padding: 0 48px;
   }
 
-  /* HERO */
+  /* hero */
   .hero_busca {
     background: #f0fdf4;
     padding: 48px 0 36px;
@@ -347,7 +348,7 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     line-height: 1.6;
   }
 
-  /* BARRA */
+  /* barra */
   .barra_secao {
     padding: 24px 0 0;
     background: #fff;
@@ -359,10 +360,7 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     align-items: center;
     padding-bottom: 16px;
   }
-  .busca_wrap {
-    flex: 1;
-    position: relative;
-  }
+  .busca_wrap { flex: 1; position: relative; }
   .busca_icone {
     position: absolute;
     left: 14px;
@@ -438,18 +436,27 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
   }
   .tag_ativa:hover { background: #bbf7d0; }
 
-  /* RESULTADOS */
+  /* resultados */
   .resultados_secao { padding: 28px 0 64px; background: #fff; }
   .busca_contagem { font-size: 13px; color: #6b7280; margin-bottom: 20px; }
 
+  /* grid com alinhamento de altura via subgrid */
   .projetos_grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    /* align-items: stretch faz cada célula ocupar a altura máxima da linha */
+    align-items: stretch;
     gap: 20px;
   }
+
+  .projeto_item {
+    /* display: flex + height: 100% propaga a altura para o CardProjeto dentro */
+    display: flex;
+  }
+
   .projeto_item.oculto { display: none; }
 
-  /* ESTADO VAZIO */
+  /* estado vazio */
   .estado_vazio { text-align: center; padding: 64px 16px; }
   .vazio_icone { font-size: 40px; margin-bottom: 12px; }
   .vazio_titulo { font-size: 17px; font-weight: 600; color: #374151; margin-bottom: 6px; }
@@ -467,7 +474,7 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
   }
   .botao_limpar_tudo:hover { background: #14532d; }
 
-  /* DRAWER */
+  /* overlay */
   .filtros_overlay {
     display: none;
     position: fixed;
@@ -477,6 +484,7 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
   }
   .filtros_overlay.aberto { display: block; }
 
+  /* drawer */
   .filtros_drawer {
     position: fixed;
     top: 0;
@@ -587,7 +595,6 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
   }
   .botao_limpar:hover { border-color: #9ca3af; background: #f9fafb; }
 
-  /* RESPONSIVO */
   @media (max-width: 640px) {
     .container { padding: 0 24px; }
     .barra_linha { flex-direction: column; align-items: stretch; }

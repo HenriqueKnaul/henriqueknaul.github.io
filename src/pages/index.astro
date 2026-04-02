@@ -22,7 +22,7 @@ const QUANTIDADE_INICIAL = 3;
         à comunidade local. Explore projetos incríveis que combinam
         tecnologia, criatividade e impacto social.
       </p>
-      <a href="/projects" class="botao_explorar">Explorar Projetos →</a>
+      <a href="/projetos" class="botao_explorar">Explorar Projetos →</a>
     </div>
   </section>
 
@@ -33,7 +33,7 @@ const QUANTIDADE_INICIAL = 3;
         <h2>Projetos em Destaque</h2>
         <p class="destaque_subtitulo">Conheça alguns dos projetos mais populares da nossa comunidade</p>
       </div>
-      <a href="/projects" class="botao_ver_todos">Ver Todos →</a>
+      <a href="/projetos" class="botao_ver_todos">Ver Todos →</a>
     </div>
 
     <div class="lista_projetos" id="lista_projetos">
@@ -51,6 +51,7 @@ const QUANTIDADE_INICIAL = 3;
             idade_minima={projeto.data.idade_minima}
             duracao={projeto.data.duracao}
             dificuldade={projeto.data.dificuldade}
+            variante="lista"
             slug={projeto.id}
             autor={projeto.data.autor}
           />
