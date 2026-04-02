@@ -13,6 +13,7 @@ const projetosCollection = defineCollection({
     dificuldade: z.enum(['iniciante', 'intermediario', 'avancado']),
     categoria: z.array(z.string()).min(1),
     tags: z.array(z.string()).default([]),
+    thumbnail: z.string().optional(), //adicionei campo pois iremos precisar -- Kaique
   }),
 });
 
