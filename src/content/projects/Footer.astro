@@ -1,0 +1,132 @@
+---
+// sem props por enquanto, footer é igual em todas as páginas
+---
+
+<footer class="footer">
+  <div class="footer_grid">
+
+    <!-- coluna 1: logo e descrição -->
+    <div class="footer_marca">
+      <a href="/">
+        <img src="/logo.png" alt="UDESC Maker" class="footer_logo" />
+      </a>
+      <p>Fomentando a cultura maker na universidade e na comunidade.</p>
+    </div>
+
+    <!-- coluna 2: navegação -->
+    <div>
+      <h4>Navegação</h4>
+      <ul>
+        <li><a href="/">Início</a></li>
+        <li><a href="/projects">Projetos</a></li>
+      </ul>
+    </div>
+
+    <!-- coluna 3: categorias -->
+    <div>
+      <h4>Categorias</h4>
+      <ul>
+        <li><a href="/projects">Robótica</a></li>
+        <li><a href="/projects">Eletrônica</a></li>
+        <li><a href="/projects">Impressão 3D</a></li>
+        <li><a href="/projects">Programação</a></li>
+      </ul>
+    </div>
+
+    <!-- coluna 4: contato -->
+    <div>
+      <h4>Contato</h4>
+      <ul>
+        <li>
+          <!-- ícone de email -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          maker@udesc.br
+        </li>
+        <li>
+          <!-- ícone do github -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+          </svg>
+          github.com/udesc-maker
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- linha de copyright -->
+  <div class="footer_bottom">
+    <p>© 2026 UDESC MAKER. Desenvolvido para fomentar a cultura maker na UDESC.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: #f3f4f6;
+    padding: 60px 48px 0;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .footer_grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 48px;
+  }
+
+  .footer_logo {
+    height: 48px;
+    width: auto;
+    margin-bottom: 12px;
+  }
+
+  .footer_marca p {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 240px;
+  }
+
+  .footer h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #1a1a1a;
+  }
+
+  .footer ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer ul li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #166534;
+    font-size: 14px;
+  }
+
+  .footer ul a {
+    color: #166534;
+    font-size: 14px;
+    text-decoration: none;
+  }
+
+  .footer ul a:hover {
+    text-decoration: underline;
+  }
+
+  .footer_bottom {
+    border-top: 1px solid #e5e7eb;
+    padding: 20px 0;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 13px;
+  }
+</style>
