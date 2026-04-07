@@ -10,58 +10,26 @@ thumbnail: "/braco-robotico.jpg"
 tags: ["robo", "braco robotico", "servo motor", "joystick", "controle"]
 ---
 
-# Braço Robótico com Joystick
+## Sobre o Projeto
 
-Monte um braço robótico que pode ser controlado em tempo real usando um joystick. Esse projeto é muito usado em introdução à robótica industrial.
+Monte um braço robótico que pode ser controlado em tempo real usando um joystick. Muito usado em introdução à robótica industrial.
 
-## Materiais
-* 1 Arduino Uno
-* 3 a 5 servo motores (SG90 ou MG996R)
-* 1 módulo joystick (KY-023)
-* Fonte de alimentação externa (5V a 6V)
-* Jumpers (fios)
-* Estrutura do braço (pode ser 3D, MDF ou papelão reforçado)
+## Materiais Necessários
 
-## Como fazer
+- 1 Arduino Uno
+- 3 a 5 servo motores SG90 ou MG996R
+- 1 módulo joystick KY-023
+- Fonte de alimentação externa 5V a 6V
+- Jumpers fios
+- Estrutura do braço em 3D, MDF ou papelão reforçado
 
-### 1. Montagem da estrutura
-1. Monte a base do braço.
-2. Fixe os servos nas articulações (base, braço e garra).
-3. Certifique-se de que os movimentos estão livres.
+## Passo a Passo
 
-### 2. Ligações elétricas
-1. Conecte os servos ao Arduino (pinos PWM).
-2. Ligue o joystick:
-   - Eixo X → A0
-   - Eixo Y → A1
-3. Use fonte externa para alimentar os servos.
-4. Conecte o GND de tudo em comum.
-
-### 3. Código básico (Arduino)
-
-```cpp
-#include <Servo.h>
-
-Servo servoBase;
-Servo servoBraco;
-
-int joyX = A0;
-int joyY = A1;
-
-void setup() {
-  servoBase.attach(9);
-  servoBraco.attach(10);
-}
-
-void loop() {
-  int valX = analogRead(joyX);
-  int valY = analogRead(joyY);
-
-  int posBase = map(valX, 0, 1023, 0, 180);
-  int posBraco = map(valY, 0, 1023, 0, 180);
-
-  servoBase.write(posBase);
-  servoBraco.write(posBraco);
-
-  delay(15);
-}
+1. Monte a base do braço
+2. Fixe os servos nas articulações base, braço e garra
+3. Certifique-se de que os movimentos estão livres
+4. Conecte os servos ao Arduino nos pinos PWM
+5. Ligue o eixo X do joystick no A0 e o eixo Y no A1
+6. Use fonte externa para alimentar os servos
+7. Conecte o GND de tudo em comum
+8. Carregue o código e teste os movimentos
