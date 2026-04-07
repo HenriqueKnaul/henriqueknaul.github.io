@@ -8,6 +8,13 @@ dificuldade: "avancado"
 categoria: ["Robótica", "Arduino", "Automação"]
 thumbnail: "/robo-linha.jpg"
 tags: ["arduino", "robo", "sensor", "linha", "automacao"]
+recursos:
+  - nome: "Código Fonte (GitHub)"
+    tipo: "codigo"
+    url: "#"
+  - nome: "Guia da Ponte H"
+    tipo: "pdf"
+    url: "#"
 ---
 
 ## Sobre o Projeto

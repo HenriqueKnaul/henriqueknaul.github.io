@@ -2,7 +2,6 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-// exatamente igual ao que funcionava antes
 export async function getStaticPaths() {
   const allProjects = await getCollection('projects');
   return allProjects.map(project => ({
@@ -11,17 +10,16 @@ export async function getStaticPaths() {
   }));
 }
 
-// mantém o nome "project" igual ao que vem do getStaticPaths
 const { project } = Astro.props;
 const { Content } = await render(project);
 const d = project.data;
 
-// cores do badge de dificuldade
 const cor_dificuldade: Record<string, string> = {
   iniciante:     'badge_iniciante',
   intermediario: 'badge_intermediario',
   avancado:      'badge_avancado',
 };
+
 const label_dificuldade: Record<string, string> = {
   iniciante:     'Iniciante',
   intermediario: 'Intermediário',
@@ -31,9 +29,8 @@ const label_dificuldade: Record<string, string> = {
 
 <BaseLayout titulo_pagina={`${d.titulo} — UDESC MAKER`} pagina_ativa="projetos">
 
-  <!-- barra voltar / compartilhar -->
   <div class="topbar">
-    <a href="/projects" class="botao_voltar">
+    <a href="/projetos" class="botao_voltar">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="15 18 9 12 15 6"/>
       </svg>
@@ -51,7 +48,6 @@ const label_dificuldade: Record<string, string> = {
 
   <div class="pagina_wrap">
 
-    <!-- HERO -->
     <div class="projeto_hero">
       <img
         src={d.thumbnail ?? '/images/placeholder.jpg'}
@@ -113,10 +109,12 @@ const label_dificuldade: Record<string, string> = {
       </div>
     </div>
 
-    <!-- conteúdo do markdown -->
     <div class="secoes">
+      
+      <div class="prose_wrapper">
+        <Content />
+      </div>
 
-      <!-- recursos adicionais — vazio por enquanto, arquivos serão vinculados depois -->
       <div class="recursos_bloco">
         <div class="recursos_cabecalho">
           <div class="recursos_icone">
@@ -124,14 +122,28 @@ const label_dificuldade: Record<string, string> = {
           </div>
           <span>Recursos Adicionais</span>
         </div>
-        <div class="recursos_vazio">
-          <p>Nenhum arquivo vinculado ainda.</p>
-        </div>
+        
+        {d.recursos && d.recursos.length > 0 ? (
+          <div class="recursos_grid">
+            {d.recursos.map((rec: any) => (
+              <a href={rec.url} target="_blank" class="recurso_card" style="text-decoration: none;">
+                <div class="recurso_icone_wrap">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </div>
+                <div>
+                  <span class="recurso_nome">{rec.nome}</span>
+                  <span class="recurso_tipo" style="text-transform: uppercase;">{rec.tipo}</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div class="recursos_vazio">
+            <p>Nenhum arquivo vinculado ainda.</p>
+          </div>
+        )}
       </div>
 
-      <div class="prose_wrapper">
-        <Content />
-      </div>
     </div>
 
   </div>
@@ -277,7 +289,7 @@ const label_dificuldade: Record<string, string> = {
     border-left: 4px solid #166534;
     border-radius: 12px;
     background: white;
-    margin-bottom: 20px;
+    margin-top: 40px;
     overflow: hidden;
   }
   .recursos_cabecalho {
@@ -314,7 +326,6 @@ const label_dificuldade: Record<string, string> = {
   .recurso_tipo {
     display: block; font-size: 12px; color: #6b7280;
   }
-
   .prose_wrapper :global(h3) {
     font-size: 15px; font-weight: 700; color: #166534; margin: 16px 24px 8px;
   }

@@ -8,6 +8,13 @@ dificuldade: "avancado"
 categoria: ["Robótica", "Arduino", "Automação"]
 thumbnail: "/braco-robotico.jpg"
 tags: ["robo", "braco robotico", "servo motor", "joystick", "controle"]
+recursos:
+  - nome: "Código Fonte do Arduino"
+    tipo: "codigo"
+    url: "https://github.com/HenriqueKnaul/udesc-maker/blob/main/src/content/projects/braco-robotico.md?plain=1"
+  - nome: "Moldes 3D das Peças"
+    tipo: "3d"
+    url: "https://sketchfab.com/3d-models/projeto-braco-robotico-f350a2e85c9444c5ac46ca33586a977c"
 ---
 
 ## Sobre o Projeto

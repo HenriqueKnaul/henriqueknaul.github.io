@@ -8,6 +8,10 @@ dificuldade: "intermediario"
 categoria: ["Robótica", "Engenharia"]
 thumbnail: "/carrinho.jpg"
 tags: ["carrinho", "motor", "roda"]
+recursos:
+  - nome: "Esquema Elétrico"
+    tipo: "pdf"
+    url: "#"
 ---
 
 ## Sobre o Projeto
