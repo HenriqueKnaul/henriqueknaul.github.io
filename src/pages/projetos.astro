@@ -11,7 +11,6 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
 
 <BaseLayout titulo_pagina="Projetos" pagina_ativa="projetos">
 
-  <!-- hero -->
   <section class="hero_busca">
     <div class="container">
       <h1>Projetos Maker</h1>
@@ -19,7 +18,6 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     </div>
   </section>
 
-  <!-- barra de busca -->
   <section class="barra_secao">
     <div class="container">
       <div class="barra_linha">
@@ -44,12 +42,10 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
         </button>
       </div>
 
-      <!-- tags de filtros ativos -->
       <div id="filtros_ativos" class="filtros_ativos" style="display:none"></div>
     </div>
   </section>
 
-  <!-- resultados -->
   <section class="resultados_secao">
     <div class="container">
       <p id="busca_contagem" class="busca_contagem"></p>
@@ -81,7 +77,6 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
         ))}
       </div>
 
-      <!-- estado vazio -->
       <div id="estado_vazio" class="estado_vazio" style="display:none">
         <div class="vazio_icone">🔍</div>
         <p class="vazio_titulo">Nenhum projeto encontrado</p>
@@ -91,10 +86,8 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     </div>
   </section>
 
-  <!-- overlay -->
   <div id="filtros_overlay" class="filtros_overlay"></div>
 
-  <!-- drawer de filtros -->
   <aside id="filtros_drawer" class="filtros_drawer" role="dialog" aria-modal="true" aria-label="Filtros">
     <div class="drawer_cabecalho">
       <div>
@@ -106,7 +99,6 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
 
     <div class="drawer_corpo">
 
-      <!-- categorias geradas dos .md -->
       <fieldset class="filtro_grupo">
         <legend class="filtro_legenda">Categorias</legend>
         <div class="checkbox_grid">
@@ -122,12 +114,11 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
 
       <hr class="divisor" />
 
-      <!-- faixa etária -->
       <fieldset class="filtro_grupo">
         <legend class="filtro_legenda">Faixa Etária</legend>
         <div class="checkbox_stack">
           {[
-            { label: '6-9 anos',   value: '6-9'   },
+            { label: '6-9 anos',   value: '6-9'    },
             { label: '10-12 anos', value: '10-12' },
             { label: '13-15 anos', value: '13-15' },
             { label: '16+ anos',   value: '16-99' },
@@ -143,14 +134,13 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
 
       <hr class="divisor" />
 
-      <!-- dificuldade -->
       <fieldset class="filtro_grupo">
         <legend class="filtro_legenda">Dificuldade</legend>
         <div class="checkbox_stack">
           {[
-            { label: 'Iniciante',     value: 'iniciante',     cls: 'nivel_iniciante'     },
+            { label: 'Iniciante',     value: 'iniciante',     cls: 'nivel_iniciante'      },
             { label: 'Intermediário', value: 'intermediario', cls: 'nivel_intermediario' },
-            { label: 'Avançado',      value: 'avancado',      cls: 'nivel_avancado'      },
+            { label: 'Avançado',      value: 'avancado',      cls: 'nivel_avancado'       },
           ].map(n => (
             <label class="checkbox_label">
               <input type="checkbox" class="filtro_check" data-filtro="dificuldade" value={n.value} />
@@ -163,7 +153,6 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
 
       <hr class="divisor" />
 
-      <!-- duração — novo filtro -->
       <fieldset class="filtro_grupo">
         <legend class="filtro_legenda">Duração</legend>
         <div class="checkbox_stack">
@@ -171,7 +160,7 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
             { label: 'Até 59 min',  value: '0-59'    },
             { label: '1h - 2h',  value: '60-120'  },
             { label: '2h - 5h',     value: '120-300' },
-            { label: 'Mais de 5h',  value: '300-999' },
+            { label: 'Mais de 5h',  value: '301-999' },
           ].map(f => (
             <label class="checkbox_label">
               <input type="checkbox" class="filtro_check" data-filtro="duracao" value={f.value} />
@@ -210,11 +199,10 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
   const contagem_badge = document.getElementById('filtros_contagem') as HTMLSpanElement;
   const filtros_ativos = document.getElementById('filtros_ativos')  as HTMLDivElement;
   const busca_contagem = document.getElementById('busca_contagem')  as HTMLParagraphElement;
-  const estado_vazio   = document.getElementById('estado_vazio')    as HTMLDivElement;
+  const estado_vazio    = document.getElementById('estado_vazio')    as HTMLDivElement;
   const itens          = document.querySelectorAll<HTMLDivElement>('.projeto_item');
   const checks         = document.querySelectorAll<HTMLInputElement>('.filtro_check');
 
-  // converte string de duração para minutos
   function parseDuracao(duracao: string): number {
     const nums = duracao.match(/\d+/g);
     if (!nums) return 0;
@@ -223,14 +211,9 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     if (duracao.toLowerCase().includes('hora') || duracao.toLowerCase().includes(' h')) {
       return maior * 60;
     }
-    if (duracao.toLowerCase().includes('min')) {
-      return maior;
-    }
-    // fallback: se tiver "a" ou "-" entre dois números, pega o maior
-    return maior * 60;
+    return maior;
   }
 
-  // drawer
   function abrirDrawer() {
     drawer.classList.add('aberto');
     overlay.classList.add('aberto');
@@ -251,7 +234,6 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
   overlay.addEventListener('click', fecharDrawer);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharDrawer(); });
 
-  // filtros
   function aplicarFiltros() {
     let visiveis = 0;
 
@@ -266,31 +248,23 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
 
       const q = estado.query;
       const ok_query = !q || titulo.includes(q) || resumo.includes(q) || tags.includes(q);
-
-      const ok_cat = estado.categorias.size === 0 ||
-        [...estado.categorias].some(c => categorias.includes(c));
-
-      const ok_idade = estado.idades.size === 0 ||
-        [...estado.idades].some(faixa => {
-          const [min, max] = faixa.split('-').map(Number);
-          return idade >= min && idade <= max;
-        });
-
+      const ok_cat = estado.categorias.size === 0 || [...estado.categorias].some(c => categorias.includes(c));
+      const ok_idade = estado.idades.size === 0 || [...estado.idades].some(faixa => {
+        const [min, max] = faixa.split('-').map(Number);
+        return idade >= min && idade <= max;
+      });
       const ok_dif = estado.dificuldades.size === 0 || estado.dificuldades.has(dificuldade);
-
-      const ok_dur = estado.duracoes.size === 0 ||
-        [...estado.duracoes].some(faixa => {
-          const [min, max] = faixa.split('-').map(Number);
-          return duracao_min >= min && duracao_min <= max;
-        });
+      const ok_dur = estado.duracoes.size === 0 || [...estado.duracoes].some(faixa => {
+        const [min, max] = faixa.split('-').map(Number);
+        return duracao_min >= min && duracao_min <= max;
+      });
 
       const mostrar = ok_query && ok_cat && ok_idade && ok_dif && ok_dur;
       item.classList.toggle('oculto', !mostrar);
       if (mostrar) visiveis++;
     });
 
-    busca_contagem.textContent =
-      `${visiveis} projeto${visiveis !== 1 ? 's' : ''} encontrado${visiveis !== 1 ? 's' : ''}`;
+    busca_contagem.textContent = `${visiveis} projeto${visiveis !== 1 ? 's' : ''} encontrado${visiveis !== 1 ? 's' : ''}`;
     estado_vazio.style.display = visiveis === 0 ? 'block' : 'none';
 
     const total_filtros = estado.categorias.size + estado.idades.size + estado.dificuldades.size + estado.duracoes.size;
@@ -300,17 +274,9 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     renderizarTags();
   }
 
-  const labels_idade: Record<string, string> = {
-    '6-9': '6-9 anos', '10-12': '10-12 anos',
-    '13-15': '13-15 anos', '16-99': '16+ anos',
-  };
-  const labels_dif: Record<string, string> = {
-    iniciante: 'Iniciante', intermediario: 'Intermediário', avancado: 'Avançado',
-  };
-  const labels_dur: Record<string, string> = {
-    '0-59': 'Até 59 min', '60-120': '1h - 2h',
-    '120-300': '2h - 5h', '300-999': 'Mais de 5h',
-  };
+  const labels_idade: Record<string, string> = { '6-9': '6-9 anos', '10-12': '10-12 anos', '13-15': '13-15 anos', '16-99': '16+ anos' };
+  const labels_dif: Record<string, string> = { iniciante: 'Iniciante', intermediario: 'Intermediário', avancado: 'Avançado' };
+  const labels_dur: Record<string, string> = { '0-59': 'Até 59 min', '60-120': '1h - 2h', '120-300': '2h - 5h', '301-999': 'Mais de 5h' };
 
   function renderizarTags() {
     filtros_ativos.innerHTML = '';
@@ -320,10 +286,14 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
       ...[...estado.dificuldades].map(v => ({ label: labels_dif[v] ?? v,  set: estado.dificuldades, value: v })),
       ...[...estado.duracoes].map(v    => ({ label: labels_dur[v] ?? v,   set: estado.duracoes,    value: v })),
     ];
+
     todos.forEach(({ label, set, value }) => {
       const tag = document.createElement('button');
       tag.className = 'tag_ativa';
-      tag.textContent = `${label} ✕`;
+      tag.innerHTML = `
+        ${label}
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      `;
       tag.addEventListener('click', () => {
         set.delete(value);
         checks.forEach(c => { if (c.value === value) c.checked = false; });
@@ -354,28 +324,62 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     }, 200);
   });
 
-  function limparFiltros() {
-    estado.categorias.clear();
-    estado.idades.clear();
-    estado.dificuldades.clear();
-    estado.duracoes.clear();
+  limpar_btn.addEventListener('click', () => {
+    estado.categorias.clear(); estado.idades.clear(); estado.dificuldades.clear(); estado.duracoes.clear();
     checks.forEach(c => { c.checked = false; });
     aplicarFiltros();
-  }
-  function limparTudo() {
-    limparFiltros();
-    estado.query = '';
-    busca_input.value = '';
-    aplicarFiltros();
-  }
+  });
 
-  limpar_btn.addEventListener('click', limparFiltros);
-  limpar_tudo.addEventListener('click', limparTudo);
+  limpar_tudo.addEventListener('click', () => {
+    estado.query = ''; busca_input.value = '';
+    estado.categorias.clear(); estado.idades.clear(); estado.dificuldades.clear(); estado.duracoes.clear();
+    checks.forEach(c => { c.checked = false; });
+    aplicarFiltros();
+  });
 
   aplicarFiltros();
 </script>
 
-<style>
+<style is:global>
+  /* CONFIGURAÇÃO GLOBAL PARA ELEMENTOS DINÂMICOS */
+  .filtros_ativos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 4px 0 16px 0;
+  }
+
+  .tag_ativa {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f0fdf4;
+    color: #166534;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid #bbf7d0;
+    font-family: inherit;
+    transition: all 0.15s ease;
+  }
+
+  .tag_ativa:hover {
+    background: #dcfce7;
+    border-color: #166534;
+  }
+
+  .tag_ativa svg {
+    opacity: 0.6;
+    transition: opacity 0.15s;
+  }
+
+  .tag_ativa:hover svg {
+    opacity: 1;
+  }
+
+  /* ESTILO LOCAL DO COMPONENTE */
   .container {
     max-width: 1280px;
     margin: 0 auto;
@@ -432,7 +436,6 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     transition: border-color 0.15s;
   }
   .busca_input:focus { border-color: #166534; }
-  .busca_input::placeholder { color: #9ca3af; }
 
   .filtros_botao {
     display: flex;
@@ -448,7 +451,7 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     cursor: pointer;
     white-space: nowrap;
     font-family: inherit;
-    transition: border-color 0.15s, background 0.15s;
+    transition: all 0.15s;
   }
   .filtros_botao:hover,
   .filtros_botao.ativo { border-color: #166534; background: #f0fdf4; color: #14532d; }
@@ -462,29 +465,6 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     padding: 1px 7px;
     line-height: 1.5;
   }
-
-  .filtros_ativos {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding-bottom: 12px;
-  }
-  .tag_ativa {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: #dcfce7;
-    color: #166534;
-    font-size: 12px;
-    font-weight: 500;
-    padding: 4px 12px;
-    border-radius: 999px;
-    cursor: pointer;
-    border: none;
-    font-family: inherit;
-    transition: background 0.15s;
-  }
-  .tag_ativa:hover { background: #bbf7d0; }
 
   .resultados_secao { padding: 28px 0 64px; background: #fff; }
   .busca_contagem { font-size: 13px; color: #6b7280; margin-bottom: 20px; }
@@ -514,7 +494,6 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     cursor: pointer;
     font-family: inherit;
   }
-  .botao_limpar_tudo:hover { background: #14532d; }
 
   .filtros_overlay {
     display: none;
@@ -558,9 +537,7 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     color: #9ca3af;
     cursor: pointer;
     padding: 4px;
-    line-height: 1;
   }
-  .drawer_fechar:hover { color: #374151; }
 
   .drawer_corpo {
     flex: 1;
@@ -583,7 +560,6 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     font-size: 14px;
     color: #374151;
     cursor: pointer;
-    user-select: none;
   }
   .checkbox_label input[type="checkbox"] { display: none; }
   .checkmark {
@@ -591,26 +567,13 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     height: 18px;
     border: 1.5px solid #d1d5db;
     border-radius: 4px;
-    flex-shrink: 0;
     background: #fff;
-    transition: border-color 0.15s, background 0.15s;
     position: relative;
   }
-  .checkbox_label input:checked + .checkmark {
-    background: #166534;
-    border-color: #166534;
-  }
+  .checkbox_label input:checked + .checkmark { background: #166534; border-color: #166534; }
   .checkbox_label input:checked + .checkmark::after {
-    content: '';
-    position: absolute;
-    left: 4px;
-    top: 1px;
-    width: 5px;
-    height: 9px;
-    border: 2px solid #fff;
-    border-top: none;
-    border-left: none;
-    transform: rotate(45deg);
+    content: ''; position: absolute; left: 4px; top: 1px; width: 5px; height: 9px;
+    border: 2px solid #fff; border-top: none; border-left: none; transform: rotate(45deg);
   }
 
   .nivel_badge { font-weight: 600; padding: 2px 10px; border-radius: 4px; font-size: 13px; }
@@ -628,16 +591,11 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
     border: 1.5px solid #e5e7eb;
     border-radius: 8px;
     font-size: 14px;
-    color: #374151;
     cursor: pointer;
-    font-family: inherit;
-    transition: border-color 0.15s, background 0.15s;
   }
-  .botao_limpar:hover { border-color: #991b1b; background: #f9fafb; }
 
   @media (max-width: 640px) {
     .container { padding: 0 24px; }
     .barra_linha { flex-direction: column; align-items: stretch; }
-    .filtros_botao { justify-content: center; }
   }
 </style>
