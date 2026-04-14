@@ -1,0 +1,24 @@
+name: Validar Pull Request
+
+on:
+  pull_request:
+    branches: [main] # roda automaticamente em todo PR aberto para a main
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4 # baixa o código do PR (não da main)
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci # instala tudo que o projeto precisa
+
+      - name: Tentar build
+        run: npm run build # tenta gerar o site — se o .md tiver erro, falha aqui e o PR fica com ❌

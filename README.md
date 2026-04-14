@@ -1,43 +1,107 @@
-# Astro Starter Kit: Minimal
+# UDESC Maker — Plataforma de Projetos
 
-```sh
-npm create astro@latest -- --template minimal
+Plataforma colaborativa para compartilhar projetos maker na UDESC e comunidade. Qualquer pessoa pode contribuir com um projeto enviando um Pull Request com um arquivo Markdown.
+
+---
+
+## 🚀 Como contribuir com um projeto
+
+1. Faça um **fork** deste repositório
+2. Dentro de `src/content/projects/`, crie uma pasta com o slug do seu projeto:
+   ```
+   src/content/projects/meu-projeto/
+   ```
+3. Copie o arquivo `layout-base.md` como ponto de partida e renomeie para `meu-projeto.md`
+4. Preencha os campos do cabeçalho YAML e escreva o conteúdo do projeto
+5. Coloque a imagem de capa em `public/thumbnails/` e os arquivos do projeto em `public/projetos/meu-projeto/`
+6. Abra um **Pull Request** — após revisão e aprovação, o site é atualizado automaticamente
+
+---
+
+## 📁 Estrutura do projeto
+
 ```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
 /
 ├── public/
+│   ├── images/              # Imagens globais do site (logo, hero, etc.)
+│   ├── thumbnails/          # Imagens de capa dos projetos
+│   └── projetos/
+│       └── nome-do-projeto/ # Arquivos do projeto (imagens, PDFs, etc.)
+│
 ├── src/
+│   ├── components/
+│   │   ├── CardProjeto.astro
+│   │   ├── Navbar.astro
+│   │   └── Footer.astro
+│   ├── content/
+│   │   └── projects/
+│   │       ├── layout-base.md   # ← Modelo para novos projetos
+│   │       └── meu-projeto.md
+│   ├── layouts/
+│   │   └── BaseLayout.astro
 │   └── pages/
-│       └── index.astro
-└── package.json
+│       ├── index.astro
+│       ├── projetos.astro
+│       ├── sobre.astro
+│       ├── diretrizes.astro
+│       ├── faq.astro
+│       └── projects/
+│           └── [id].astro
+│
+├── .github/
+│   └── workflows/
+│       ├── deploy.yml       # Build e deploy automático via GitHub Actions
+│       └── validar_pr.yml   # Verifica se o .md está correto antes de aceitar o PR
+└── content.config.ts
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+---
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## 🛠️ Rodando localmente
 
-Any static assets, like images, can be placed in the `public/` directory.
+```sh
+# Instalar dependências
+npm install
 
-## 🧞 Commands
+# Iniciar servidor de desenvolvimento
+npm run dev
 
-All commands are run from the root of the project, from a terminal:
+# Build de produção
+npm run build
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+# Preview do build
+npm run preview
+```
 
-## 👀 Want to learn more?
+---
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## 🧰 Stack
+
+- [Astro](https://astro.build/) — gerador de site estático
+- GitHub Pages — hospedagem
+- GitHub Actions — build e deploy automático
+- Markdown + YAML — formato dos projetos
+
+---
+
+## 📄 Campos disponíveis no projeto (.md)
+
+| Campo | Obrigatório | Descrição |
+|---|---|---|
+| `visivel` | ✅ | `false` por padrão — mude para `true` ao publicar |
+| `titulo` | ✅ | Nome do projeto |
+| `autor` | ✅ | Nome do autor ou equipe |
+| `resumo` | ✅ | Descrição curta (máx. 150 caracteres) |
+| `idade_minima` | ✅ | Número (ex: `10`) |
+| `duracao` | ✅ | Texto livre (ex: `"2 horas"`) |
+| `dificuldade` | ✅ | `iniciante`, `intermediario` ou `avancado` |
+| `categoria` | ✅ | Lista (ex: `["Eletrônica", "Arduino"]`) |
+| `thumbnail` | ❌ | Caminho da imagem de capa |
+| `tags` | ❌ | Lista de palavras-chave |
+| `recursos` | ❌ | Lista de arquivos ou links externos |
+
+---
+
+## 📬 Contato
+
+maker@udesc.br
