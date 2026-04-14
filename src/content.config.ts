@@ -18,7 +18,7 @@ const projetosCollection = defineCollection({
     
     recursos: z.array(z.object({
       nome: z.string(),
-      tipo: z.enum(['pdf', 'codigo', 'link', '3d', 'outro']),
+      tipo: z.string(),
       url: z.string()
     })).optional(),
     

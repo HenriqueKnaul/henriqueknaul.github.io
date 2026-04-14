@@ -121,10 +121,10 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
         <legend class="filtro_legenda">Faixa Etária</legend>
         <div class="checkbox_stack">
           {[
-            { label: '6-9 anos',   value: '6-9'    },
-            { label: '10-12 anos', value: '10-12' },
-            { label: '13-15 anos', value: '13-15' },
-            { label: '16+ anos',   value: '16-99' },
+            { label: 'Livre',    value: '0-9'   },
+            { label: '+ 10 anos',      value: '10-12' },
+            { label: '+ 14 anos',      value: '13-17' },
+            { label: '+ 18 anos',      value: '18-99' },
           ].map(f => (
             <label class="checkbox_label">
               <input type="checkbox" class="filtro_check" data-filtro="idade" value={f.value} />
@@ -160,9 +160,9 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
         <legend class="filtro_legenda">Duração</legend>
         <div class="checkbox_stack">
           {[
-            { label: 'Até 59 min',  value: '0-59'    },
-            { label: '1h - 2h',  value: '60-120'  },
-            { label: '2h - 5h',     value: '120-300' },
+            { label: 'Até 1 h',  value: '0-60'    },
+            { label: '1h - 2h',  value: '61-120'  },
+            { label: '2h - 5h',     value: '121-300' },
             { label: 'Mais de 5h',  value: '301-999' },
           ].map(f => (
             <label class="checkbox_label">
@@ -276,10 +276,10 @@ const todas_categorias = [...new Set(todos_projetos.flatMap(p => p.data.categori
 
     renderizarTags();
   }
-
-  const labels_idade: Record<string, string> = { '6-9': '6-9 anos', '10-12': '10-12 anos', '13-15': '13-15 anos', '16-99': '16+ anos' };
+  
+  const labels_idade: Record<string, string> = {'0-9':   'Livre', '10-12': '10+', '13-17': '14+', '18-99': '18+' };
   const labels_dif: Record<string, string> = { iniciante: 'Iniciante', intermediario: 'Intermediário', avancado: 'Avançado' };
-  const labels_dur: Record<string, string> = { '0-59': 'Até 59 min', '60-120': '1h - 2h', '120-300': '2h - 5h', '301-999': 'Mais de 5h' };
+  const labels_dur: Record<string, string> = { '0-60': 'Até 1h', '61-120': '1h - 2h', '121-300': '2h - 5h', '301-999': 'Mais de 5h' };
 
   function renderizarTags() {
     filtros_ativos.innerHTML = '';
