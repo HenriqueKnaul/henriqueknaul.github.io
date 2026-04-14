@@ -35,8 +35,7 @@ Plataforma colaborativa para compartilhar projetos maker na UDESC e comunidade. 
 │   │   └── Footer.astro
 │   ├── content/
 │   │   └── projects/
-│   │       ├── layout-base.md   # ← Modelo para novos projetos
-│   │       └── meu-projeto.md
+│   │       ├── layout-base.md   # Modelo para novos projetos
 │   ├── layouts/
 │   │   └── BaseLayout.astro
 │   └── pages/
@@ -51,7 +50,6 @@ Plataforma colaborativa para compartilhar projetos maker na UDESC e comunidade. 
 ├── .github/
 │   └── workflows/
 │       ├── deploy.yml       # Build e deploy automático via GitHub Actions
-│       └── validar_pr.yml   # Verifica se o .md está correto antes de aceitar o PR
 └── content.config.ts
 ```
 
