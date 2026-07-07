@@ -2,7 +2,7 @@
 # 📝 MODELO DE PROJETO: Preencha os campos abaixo para inserir seu projeto no site.
 # DICA: Não apague as aspas "" e mantenha os recuos para o site não quebrar.
 
-visivel: true # Altere para 'true' para apresentar o projeto do site
+visivel: false # Altere para 'true' para apresentar o projeto do site
 titulo: "NOME DO SEU PROJETO AQUI"
 autor: "Nome do Autor ou Equipe"
 resumo: "Escreva aqui uma frase curta (máximo 150 caracteres) que resuma o projeto."
