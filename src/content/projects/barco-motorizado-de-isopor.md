@@ -1,13 +1,13 @@
 ---
-visivel: false 
+visivel: true 
 titulo: "Barco Motorizado de Isopor"
-autor: "Nome do Autor ou Equipe"
+autor: "Guilherme Rode, Henrique Knaul e Kaique de Oliveira"
 resumo: "Barquinho feito com placas de isopor e garrafa PET, movido por um motor de DVD alimentado por uma única pilha bateria, com duas velocidades."
 idade_minima: 12
 duracao: "2 horas"
 dificuldade: "intermediario"
 categoria: ["Brinquedos", "Circuitos", "Oficina"]
-thumbnail: "/thumbnails/barco-motorizado-de-isopor.jpg" 
+thumbnail: "/thumbnails/barco-motorizado-de-isopor.jpeg" 
 tags: ["isopor", "motor de dvd", "garrafa pet", "reciclagem", "eletrônica", "flutuação"]
 
 recursos:
@@ -17,16 +17,16 @@ recursos:
     url: "https://www.youtube.com/watch?v=vMRnd5ROdY0&t=127s"
 
   - nome: "Foto do projeto pronto - vista lateral"
-    tipo: ".heic"
-    url: "/projetos/barco-isopor/foto-01.heic"
+    tipo: ".jpeg"
+    url: "/projetos/barco-isopor/foto-1.jpeg"
 
   - nome: "Foto do projeto pronto - vista frontal"
-    tipo: ".heic"
-    url: "/projetos/barco-isopor/foto-03.heic"
+    tipo: ".jpeg"
+    url: "/projetos/barco-isopor/foto-3.jpeg"
 
   - nome: "Foto do projeto pronto - vista diagonal"
-    tipo: ".heic"
-    url: "/projetos/barco-isopor/foto-02.heic"
+    tipo: ".jpeg"
+    url: "/projetos/barco-isopor/foto.2.jpeg"
 ---
 
 ## Sobre o Projeto
@@ -77,16 +77,4 @@ Neste projeto será construído um barco motorizado utilizando placas de isopor 
 
 
 
-![Montagem das laterais de isopor formando a popa do barco](https://manualmaker.com/media/cache/8e/24/8e24c55a397978508289ee517353163d.jpg)
 
-![Peças de garrafa PET cortadas para reforçar as laterais do casco](https://manualmaker.com/media/cache/3b/9f/3b9f548129d9eb7eb4e5bb7b5b6d2ed4.jpg)
-
-![Reforço de palitos de churrasco montado em formato retangular](https://manualmaker.com/media/cache/b6/e8/b6e8b131bb1a472703c37c02fcc79ddf.jpg)
-
-![Suporte de isopor para o motor colado próximo à borda do barco](https://manualmaker.com/media/cache/eb/a7/eba704628e528b13c55bf80c5171ac9f.jpg)
-
-![Motor DC fixado com a ponta do eixo voltada para baixo](https://manualmaker.com/media/cache/86/76/8676c56750835a03ee39462c27791162.jpg)
-
-![Furo feito na parte de trás do casco para passagem do cotonete](https://manualmaker.com/media/cache/2d/fb/2dfb9a51531d015e07db744f2dba6749.jpg)
-
-![Esquema da fiação do motor, interruptor e pilha](https://manualmaker.com/media/cache/40/86/4086686be52b0954deeb7b7f7cad9bf3.jpg)
